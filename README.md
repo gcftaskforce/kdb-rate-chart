@@ -1,57 +1,42 @@
-# Browser-Side Code for Deforestation Rate Chart
+# Deforestation Rate Chart (Browser-Side)
 
-This repository contains the browser-side code for the KDB website's *Deforestation Rate* chart. The [Chart.js](https://www.chartjs.org/) library is used.
+## Description and Purpose
 
-Note that chart data is passed server-side using HTML attributes. See the website EJS partial [kdb-site/views/partials/deforestation-rate-chart.ejs](https://github.com/gcftaskforce/kdb-site/blob/master/views/partials/deforestation-rate-chart.ejs) for a complete understanding.
+The *Deforestation Rate Chart* is used both at the national level and jurisdictional level to visually represent annual deforestation-rate data for the region being displayed.
 
-## Overview
+## National Deforestation Rate
+
+At the national level, only the deforestation rate is displayed.
+
+## Additional Overlays For Jurisdictions
+
+At the jurisdictional level, several additional data overlays are combined to present a visualization of how the underlying series compares over time with established reference rates as well as a future target rate. Briefly, the overlays are:
+
+- **Rio Branco Declaration Deforestation Reduction Goal** (single point)
+- **Deforestation Reference Rate** (single point or line) If a single year is specified, a point is displayed. If a year range is specified, a line segment over the range is displayed.
+- **Historical Reference Rates** (optional) (multiple line segments displayed as steps) Jurisdictions may specify reference rates defined prior to the establishment of the currently accepted *Deforestation Reference Rate*. These rates are displayed as steps appearing before *Deforestation Reference Rate* thus forming a complete chronological data series.
+- **Regression Line** (single line) Regression line is drawn from the earliest established *Reference Rate* point to the *Rio Branco Declaration Deforestation Reduction Goal* point.
 
 ![Rate Chart](/public/images/screenshots/rate_chart.png)
 
-Displayed on both the "Overview" and "Forest Monitoring" tabs for **jurisdictional** content.
+## Technical Overview
 
-Also the simplified *national* version on the "Overview" tab for  **national** content. Do not display goals and targets or the associated regression and threshold lines.
+This repository contains the browser-side code for the *Deforestation Rate* chart. The [Chart.js](https://www.chartjs.org/) library is used.
 
----
+Note that chart data is passed server-side using HTML data attributes. See the website EJS partial [kdb-site/views/partials/deforestation-rate-chart.ejs](https://github.com/gcftaskforce/kdb-site/blob/master/views/partials/deforestation-rate-chart.ejs) for a complete understanding.
 
-deforestation_rates / national_deforestation_rate
+The full chart with all data overlays is displayed on both the "Overview" and "Forest Monitoring" tabs for **jurisdictional** content.
 
-Deforestation Rates
+The simplified *national* version is displayed on the "Overview" tab for  **national** content.
 
-this field name is passed to the partial.
+Note the partial must be passed a `fieldName` argument specifying the (property) name of the "Deforestation Rate" (`national_deforestation_rate` or `deforestation_rates` for national or jurisdictional data respectively).
 
----
+The table below summarizes the names of the underlying data properties.
 
-deforestationReferenceRate (both amount and year)
+Label | Data Property Name | Notes
+----- | ------------- | -----
+Deforestation Rates | `national_deforestation_rate` or `deforestation_rates` | `Array` kind edited by client via the CMS
+Deforestation Reference Rate | `deforestationReferenceRate` | `Value` kind (with year or year range) edited by client via the CMS
+Historical Reference Rates | `deforestationReferenceRates` | Javascript array defined on a per-jurisdiction basis in the API's 'etc/regions' (**not** edited by client via the CMS)
 
-Deforestation Reference Rate
-
-"Forest Monitoring" tab
-
----
-
-deforestation_reduction_goal (both amount and year)
-
-Rio Branco Declaration Deforestation Reduction Goal
-
-"Forest Monitoring" tab
-
-coordinates of the green asterisk.
-
----
-
-deforestationReferenceRates
-
-Defined on a a per jurisdiction basis.
-
-[kdb-api/etc/regions](https://github.com/gcftaskforce/kdb-api/tree/master/etc/regions)
-
-Optional
-
----
-
-If `deforestationReferenceRates` array is specified, these rates are pre-pended to the deforestationReferenceRate value.
-
-- stepwise
-
-- beginning of Rio Branco Declaration Deforestation regression becomes the beginning.
+Note that the field **Historical Reference Rates** is not currently displayed on the website but it is part of the data passed by the API.
