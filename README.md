@@ -8,7 +8,7 @@ The *Deforestation Rate Chart* is used both at the national level and jurisdicti
 
 At the national level, only the deforestation rate is displayed.
 
-### Additional Overlays For Jurisdictions
+### Additional Overlays for Jurisdictions
 
 At the jurisdictional level, several additional data overlays are combined to present a visualization of how the underlying series compares over time with established reference rates as well as a future target rate. Briefly, the overlays are:
 
